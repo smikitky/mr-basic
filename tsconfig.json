@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "module": "ES2015",
+    "strict": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "jsx": "react"
+  },
+  "exclude": ["node_modules"]
+}
