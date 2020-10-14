@@ -41,13 +41,22 @@ const Wave1D: FC = props => {
       const elapsed = lastRef.current ? now - lastRef.current : 0;
       lastRef.current = now;
 
-      ctx.clearRect(0, 0, width, height);
-
       phases.forEach((phase, i) => {
         phases[i] += (elapsed + ((i - N / 2) * gradient) / 10) / 500;
       });
 
-      ctx.fillStyle = '#0088ff';
+      ctx.fillStyle = '#ffffff';
+      if (gradient !== 0) {
+        const grad = ctx.createLinearGradient(0, 0, width, 0);
+        const luminance = 100 - Math.abs(gradient) * 5;
+        grad.addColorStop(gradient > 0 ? 0 : 1, `hsl(220, 50%, ${luminance}%)`);
+        grad.addColorStop(0.5, '#ffffff');
+        grad.addColorStop(gradient > 0 ? 1 : 0, `hsl(30, 50%, ${luminance}%)`);
+        ctx.fillStyle = grad;
+      }
+      ctx.fillRect(0, 0, width, height);
+
+      ctx.fillStyle = '#00aaff';
       phases.forEach((phase, i) => {
         ctx.beginPath();
         const h = height * (0.5 + 0.5 * Math.sin(phase));
