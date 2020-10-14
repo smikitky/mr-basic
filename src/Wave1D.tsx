@@ -1,6 +1,7 @@
 import React, { FC, useRef, useState, useEffect } from 'react';
 import Slider from '@material-ui/core/Slider';
 import Button from '@material-ui/core/Button';
+import SyncIcon from '@material-ui/icons/Sync';
 
 const N = 30;
 
@@ -48,7 +49,7 @@ const Wave1D: FC = props => {
     setGradient(value as number);
   };
 
-  const handleSliderMouseUp = () => {
+  const handleSliderComitted = () => {
     setGradient(0);
   };
 
@@ -64,7 +65,7 @@ const Wave1D: FC = props => {
         max={10}
         value={gradient}
         onChange={handleSliderChange}
-        onChangeCommitted={handleSliderMouseUp}
+        onChangeCommitted={handleSliderComitted}
         valueLabelDisplay="auto"
         marks
       />
@@ -73,6 +74,7 @@ const Wave1D: FC = props => {
           variant="contained"
           color="primary"
           onClick={handleRephaseClick}
+          startIcon={<SyncIcon />}
         >
           Rephase
         </Button>

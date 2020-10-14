@@ -6,6 +6,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import FourierGraph from './FourierGraph';
 import Wave1D from './Wave1D';
+import Wave2D from './Wave2D';
 import Help from './Help';
 import HelpIcon from '@material-ui/icons/HelpOutline';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -35,7 +36,7 @@ const App: FC = props => {
           >
             <Tab label="1D Fourier" />
             <Tab label="Wave" />
-            <Tab label="Gradient" />
+            <Tab label="Wave 2D" />
             <Tab label="2D Fourier" />
           </Tabs>
           <div className={classes.grow} />
@@ -47,7 +48,7 @@ const App: FC = props => {
       <div className="content">
         {tab === 0 && <FourierGraph />}
         {tab === 1 && <Wave1D />}
-        {tab === 2 && <div>Foo</div>}
+        {tab === 2 && <Wave2D />}
         {tab === 3 && <div>Bar</div>}
       </div>
     </StyledDiv>
