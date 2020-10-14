@@ -1,13 +1,47 @@
 import Button from '@material-ui/core/Button';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Slider from '@material-ui/core/Slider';
+import Card from '@material-ui/core/Card';
 import Switch from '@material-ui/core/Switch';
 import PauseIcon from '@material-ui/icons/Pause';
+import PlayIcon from '@material-ui/icons/PlayArrow';
 import SyncIcon from '@material-ui/icons/Sync';
 import React, { FC, useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
+import { makeStyles } from '@material-ui/core/styles';
 
 const N = 32;
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    display: 'grid',
+    gridTemplate: `
+      "v c m"
+      "b h m"
+      / 30px 600px 250px
+    `,
+    gap: '10px',
+    [theme.breakpoints.down('md')]: {
+      gridTemplate: `
+        "v c"
+        "b h"
+        "m m"
+        / 30px 600px
+      `
+    }
+  },
+  canvas: {
+    gridArea: 'c'
+  },
+  gradientX: { gridArea: 'h' },
+  gradientY: { gridArea: 'v' },
+  menu: {
+    padding: '15px',
+    gridArea: 'm',
+    display: 'flex',
+    flexFlow: 'column',
+    gap: '5px'
+  }
+}));
 
 const phaseToColor = (phase: number) => {
   const hex = (
@@ -62,6 +96,7 @@ const drawSquare = (
 };
 
 const Wave2D: FC = props => {
+  const classes = useStyles();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [gradientX, setGradientX] = useState(0);
   const [gradientY, setGradientY] = useState(0);
@@ -126,11 +161,25 @@ const Wave2D: FC = props => {
     setProtonType(ev.target.checked ? 'square' : 'circle');
   };
 
+  const handlePauseClick = () => {
+    if (pause) {
+      setPause(false);
+      lastRef.current = performance.now();
+    } else {
+      setPause(true);
+    }
+  };
+
   return (
-    <StyledDiv>
-      <canvas className="canvas" ref={canvasRef} width={600} height={600} />
+    <div className={classes.root}>
+      <canvas
+        className={classes.canvas}
+        ref={canvasRef}
+        width={600}
+        height={600}
+      />
       <Slider
-        className="gradientX"
+        className={classes.gradientX}
         min={-10}
         max={10}
         value={gradientX}
@@ -141,7 +190,7 @@ const Wave2D: FC = props => {
       />
       <Slider
         orientation="vertical"
-        className="gradientY"
+        className={classes.gradientY}
         min={-10}
         max={10}
         value={gradientY}
@@ -150,7 +199,7 @@ const Wave2D: FC = props => {
         valueLabelDisplay="auto"
         marks
       />
-      <div className="menu">
+      <Card className={classes.menu}>
         <Button
           variant="contained"
           color="primary"
@@ -162,10 +211,10 @@ const Wave2D: FC = props => {
         <Button
           variant="contained"
           color={pause ? 'secondary' : 'primary'}
-          onClick={() => setPause(p => !p)}
-          startIcon={<PauseIcon />}
+          onClick={handlePauseClick}
+          startIcon={pause ? <PlayIcon /> : <PauseIcon />}
         >
-          Pause
+          {pause ? 'Resume' : 'Pause'}
         </Button>
         <FormControlLabel
           label="Square"
@@ -177,36 +226,9 @@ const Wave2D: FC = props => {
             />
           }
         />
-      </div>
-    </StyledDiv>
+      </Card>
+    </div>
   );
 };
-
-const StyledDiv = styled.div`
-  display: grid;
-  margin: 0 auto;
-  grid-template:
-    'v c m'
-    'b h m'
-    / 30px 600px 250px;
-  grid-gap: 10px;
-  .canvas {
-    grid-area: c;
-  }
-  .gradientX {
-    grid-area: h;
-  }
-  .gradientY {
-    grid-area: v;
-  }
-  .menu {
-    grid-area: m;
-    display: flex;
-    flex-direction: column;
-    > * {
-      margin-bottom: 5px;
-    }
-  }
-`;
 
 export default Wave2D;

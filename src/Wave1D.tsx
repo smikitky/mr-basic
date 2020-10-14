@@ -1,12 +1,24 @@
-import React, { FC, useRef, useState, useEffect } from 'react';
-import Slider from '@material-ui/core/Slider';
 import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
+import Slider from '@material-ui/core/Slider';
+import { makeStyles } from '@material-ui/core/styles';
 import SyncIcon from '@material-ui/icons/Sync';
-import styled from 'styled-components';
+import React, { FC, useEffect, useRef, useState } from 'react';
+
+const useStyles = makeStyles(theme => ({
+  menu: { padding: '10px' },
+  canvas: {
+    width: '100%',
+    height: '500px',
+    marginTop: '10px',
+    marginBottom: '35px'
+  }
+}));
 
 const N = 30;
 
 const Wave1D: FC = props => {
+  const classes = useStyles();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [gradient, setGradient] = useState(0);
   const phasesRef = useRef<number[]>();
@@ -64,8 +76,23 @@ const Wave1D: FC = props => {
   };
 
   return (
-    <StyledDiv>
-      <canvas ref={canvasRef} width={1000} height={500} />
+    <div>
+      <Card className={classes.menu}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleRephaseClick}
+          startIcon={<SyncIcon />}
+        >
+          Rephase
+        </Button>
+      </Card>
+      <canvas
+        ref={canvasRef}
+        className={classes.canvas}
+        width={1000}
+        height={500}
+      />
       <Slider
         min={-10}
         max={10}
@@ -75,26 +102,8 @@ const Wave1D: FC = props => {
         valueLabelDisplay="on"
         marks
       />
-      <div>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleRephaseClick}
-          startIcon={<SyncIcon />}
-        >
-          Rephase
-        </Button>
-      </div>
-    </StyledDiv>
+    </div>
   );
 };
-
-const StyledDiv = styled.div`
-  canvas {
-    width: 100%;
-    height: 500px;
-    margin-bottom: 35px;
-  }
-`;
 
 export default Wave1D;
