@@ -118,28 +118,8 @@ const Wave2D: FC = props => {
     };
   }, [gradientX, gradientY, pause, protonType]);
 
-  const handleSliderXChange = (ev: any, value: number | number[]) => {
-    setGradientX(value as number);
-  };
-
-  const handleSliderXCommitted = () => {
-    setGradientX(0);
-  };
-
-  const handleSliderYChange = (ev: any, value: number | number[]) => {
-    setGradientY(value as number);
-  };
-
-  const handleSliderYCommitted = () => {
-    setGradientY(0);
-  };
-
   const handleRephaseClick = () => {
     phases.forEach((_, i) => (phases[i] = new Array(N).fill(0)));
-  };
-
-  const handlePauseClick = () => {
-    setPause(p => !p);
   };
 
   const handleProtonTypeChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
@@ -154,8 +134,8 @@ const Wave2D: FC = props => {
         min={-10}
         max={10}
         value={gradientX}
-        onChange={handleSliderXChange}
-        onChangeCommitted={handleSliderXCommitted}
+        onChange={(ev, value) => setGradientX(value as number)}
+        onChangeCommitted={() => setGradientX(0)}
         valueLabelDisplay="auto"
         marks
       />
@@ -165,8 +145,8 @@ const Wave2D: FC = props => {
         min={-10}
         max={10}
         value={gradientY}
-        onChange={handleSliderYChange}
-        onChangeCommitted={handleSliderYCommitted}
+        onChange={(ev, value) => setGradientY(value as number)}
+        onChangeCommitted={() => setGradientY(0)}
         valueLabelDisplay="auto"
         marks
       />
@@ -182,7 +162,7 @@ const Wave2D: FC = props => {
         <Button
           variant="contained"
           color={pause ? 'secondary' : 'primary'}
-          onClick={handlePauseClick}
+          onClick={() => setPause(p => !p)}
           startIcon={<PauseIcon />}
         >
           Pause
@@ -221,11 +201,10 @@ const StyledDiv = styled.div`
   }
   .menu {
     grid-area: m;
-    background: #eeeeee;
     display: flex;
     flex-direction: column;
     > * {
-      margin-bottom: 3px;
+      margin-bottom: 5px;
     }
   }
 `;

@@ -2,6 +2,7 @@ import React, { FC, useRef, useState, useEffect } from 'react';
 import Slider from '@material-ui/core/Slider';
 import Button from '@material-ui/core/Button';
 import SyncIcon from '@material-ui/icons/Sync';
+import styled from 'styled-components';
 
 const N = 30;
 
@@ -18,8 +19,13 @@ const Wave1D: FC = props => {
     let finished = false;
     const tick = (now: DOMHighResTimeStamp) => {
       if (finished) return;
-      const ctx = canvas.getContext('2d')!;
       const { width, height } = canvas.getBoundingClientRect();
+      if (canvas.width !== width || canvas.height !== height) {
+        canvas.width = width;
+        canvas.height = height;
+      }
+
+      const ctx = canvas.getContext('2d')!;
       const elapsed = lastRef.current ? now - lastRef.current : 0;
       lastRef.current = now;
 
@@ -58,7 +64,7 @@ const Wave1D: FC = props => {
   };
 
   return (
-    <div>
+    <StyledDiv>
       <canvas ref={canvasRef} width={1000} height={500} />
       <Slider
         min={-10}
@@ -66,7 +72,7 @@ const Wave1D: FC = props => {
         value={gradient}
         onChange={handleSliderChange}
         onChangeCommitted={handleSliderComitted}
-        valueLabelDisplay="auto"
+        valueLabelDisplay="on"
         marks
       />
       <div>
@@ -79,8 +85,16 @@ const Wave1D: FC = props => {
           Rephase
         </Button>
       </div>
-    </div>
+    </StyledDiv>
   );
 };
+
+const StyledDiv = styled.div`
+  canvas {
+    width: 100%;
+    height: 500px;
+    margin-bottom: 35px;
+  }
+`;
 
 export default Wave1D;
