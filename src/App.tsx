@@ -5,17 +5,18 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import FourierGraph from './FourierGraph';
+import Wave1D from './Wave1D';
 import Help from './Help';
 import HelpIcon from '@material-ui/icons/HelpOutline';
 import Toolbar from '@material-ui/core/Toolbar';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   grow: {
-    flexGrow: 1,
-  },
+    flexGrow: 1
+  }
 }));
 
-const App: FC = (props) => {
+const App: FC = props => {
   const classes = useStyles();
   const [tab, setTab] = useState(0);
 
@@ -33,6 +34,7 @@ const App: FC = (props) => {
             aria-label="simple tabs example"
           >
             <Tab label="1D Fourier" />
+            <Tab label="Wave" />
             <Tab label="Gradient" />
             <Tab label="2D Fourier" />
           </Tabs>
@@ -44,8 +46,9 @@ const App: FC = (props) => {
       </AppBar>
       <div className="content">
         {tab === 0 && <FourierGraph />}
-        {tab === 1 && <div>Foo</div>}
-        {tab === 2 && <div>Bar</div>}
+        {tab === 1 && <Wave1D />}
+        {tab === 2 && <div>Foo</div>}
+        {tab === 3 && <div>Bar</div>}
       </div>
     </StyledDiv>
   );
