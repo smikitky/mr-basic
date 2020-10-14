@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
   entry: {
-    index: path.join(__dirname, 'src', 'index.tsx'),
+    index: path.join(__dirname, 'src', 'index.tsx')
   },
   devtool: 'inline-source-map',
   module: {
@@ -11,14 +11,16 @@ module.exports = {
       {
         test: /\.html$/,
         loader: 'file-loader',
-        options: { name: '[name].[ext]' },
-      },
-    ],
+        options: { name: '[name].[ext]' }
+      }
+    ]
   },
   devServer: {
+    index: 'index.html',
+    historyApiFallback: true,
     contentBase: path.join(__dirname, 'dist'),
     compress: true,
-    port: 9000,
+    port: 9000
   },
-  resolve: { extensions: ['.tsx', '.ts', '.js'] },
+  resolve: { extensions: ['.tsx', '.ts', '.js'] }
 };
