@@ -12,34 +12,34 @@ import { makeStyles } from '@material-ui/core/styles';
 const N = 32;
 
 const useStyles = makeStyles(theme => ({
-  root: {
+  root: {},
+  waveArea: {
     display: 'grid',
-    gridTemplate: `
-      "v c m"
-      "b h m"
-      / 30px 600px 250px
-    `,
-    gap: '10px',
+    width: 'auto',
+    gridTemplateAreas: `'v c' 'a h'`,
+    gridTemplateRows: '1100px auto',
+    gridTemplateColumns: 'auto 1100px',
+    margin: '0 auto',
+    justifyContent: 'center',
     [theme.breakpoints.down('md')]: {
-      gridTemplate: `
-        "v c"
-        "b h"
-        "m m"
-        / 30px 600px
-      `
+      gridTemplateRows: '800px auto',
+      gridTemplateColumns: 'auto 800px'
+    },
+    [theme.breakpoints.down('sm')]: {
+      gridTemplateRows: '550px auto',
+      gridTemplateColumns: 'auto 550px'
     }
   },
-  canvas: {
-    gridArea: 'c'
-  },
+  canvas: { gridArea: 'c', width: '100%', height: '100%' },
   gradientX: { gridArea: 'h' },
   gradientY: { gridArea: 'v' },
   menu: {
     padding: '15px',
     gridArea: 'm',
     display: 'flex',
-    flexFlow: 'column',
-    gap: '5px'
+    flexFlow: 'row',
+    gap: '5px',
+    marginBottom: '10px'
   }
 }));
 
@@ -116,6 +116,10 @@ const Wave2D: FC = props => {
       if (finished || pause) return;
       const ctx = canvas.getContext('2d')!;
       const { width, height } = canvas.getBoundingClientRect();
+      if (canvas.width !== width || canvas.height !== height) {
+        canvas.width = width;
+        canvas.height = height;
+      }
       const elapsed = lastRef.current ? now - lastRef.current : 0;
       lastRef.current = now;
 
@@ -172,33 +176,6 @@ const Wave2D: FC = props => {
 
   return (
     <div className={classes.root}>
-      <canvas
-        className={classes.canvas}
-        ref={canvasRef}
-        width={600}
-        height={600}
-      />
-      <Slider
-        className={classes.gradientX}
-        min={-10}
-        max={10}
-        value={gradientX}
-        onChange={(ev, value) => setGradientX(value as number)}
-        onChangeCommitted={() => setGradientX(0)}
-        valueLabelDisplay="auto"
-        marks
-      />
-      <Slider
-        orientation="vertical"
-        className={classes.gradientY}
-        min={-10}
-        max={10}
-        value={gradientY}
-        onChange={(ev, value) => setGradientY(value as number)}
-        onChangeCommitted={() => setGradientY(0)}
-        valueLabelDisplay="auto"
-        marks
-      />
       <Card className={classes.menu}>
         <Button
           variant="contained"
@@ -227,6 +204,35 @@ const Wave2D: FC = props => {
           }
         />
       </Card>
+      <div className={classes.waveArea}>
+        <canvas
+          className={classes.canvas}
+          ref={canvasRef}
+          width={600}
+          height={600}
+        />
+        <Slider
+          className={classes.gradientX}
+          min={-10}
+          max={10}
+          value={gradientX}
+          onChange={(ev, value) => setGradientX(value as number)}
+          onChangeCommitted={() => setGradientX(0)}
+          valueLabelDisplay="auto"
+          marks
+        />
+        <Slider
+          orientation="vertical"
+          className={classes.gradientY}
+          min={-10}
+          max={10}
+          value={gradientY}
+          onChange={(ev, value) => setGradientY(value as number)}
+          onChangeCommitted={() => setGradientY(0)}
+          valueLabelDisplay="auto"
+          marks
+        />
+      </div>
     </div>
   );
 };
