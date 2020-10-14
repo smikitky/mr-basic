@@ -277,7 +277,6 @@ const useStyles = makeStyles(theme => ({
     gridArea: 'a',
     padding: '10px',
     width: '250px',
-    height: '100%',
     userSelect: 'none'
   },
 
