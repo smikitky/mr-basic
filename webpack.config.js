@@ -12,6 +12,11 @@ module.exports = {
         test: /\.html$/,
         loader: 'file-loader',
         options: { name: '[name].[ext]' }
+      },
+      {
+        test: /_redirects$/,
+        loader: 'file-loader',
+        options: { name: '_redirects' }
       }
     ]
   },
