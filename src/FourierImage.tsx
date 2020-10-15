@@ -8,9 +8,20 @@ import lenna from './images/lenna.jpg';
 import snow from './images/snow.jpg';
 import starstripe from './images/starstripe.jpg';
 import zebra from './images/zebra.jpg';
+import kanji_omo from './images/kanji_omo.jpg';
+import kanji_river from './images/kanji_river.jpg';
 
 const N = 256;
-const images = { beans, cherry, lenna, snow, starstripe, zebra };
+const images = {
+  beans,
+  cherry,
+  lenna,
+  snow,
+  starstripe,
+  zebra,
+  kanji_omo,
+  kanji_river
+};
 
 const fft2d = (data: number[]) => {
   if (data.length !== N * N) throw new Error('Length error');
