@@ -9,9 +9,14 @@ module.exports = {
     rules: [
       { test: /\.tsx?$/, loader: 'ts-loader' },
       {
-        test: /\.html$/,
+        test: /\.(html)$/,
         loader: 'file-loader',
         options: { name: '[name].[ext]' }
+      },
+      {
+        test: /\.(jpg)$/,
+        loader: 'file-loader',
+        options: { name: 'images/[name].[ext]' }
       },
       {
         test: /_redirects$/,
