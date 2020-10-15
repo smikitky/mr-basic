@@ -155,7 +155,6 @@ const FourierImage: FC = props => {
 
   const handlePaint = (ev: React.MouseEvent) => {
     if (!down) return;
-    ev.preventDefault();
     const canvas = oCanvasRef.current!;
     const ctx = canvas.getContext('2d')!;
     const rect = canvas.getBoundingClientRect();
@@ -193,6 +192,7 @@ const FourierImage: FC = props => {
             <div>Original:</div>
             <canvas
               ref={oCanvasRef}
+              className={classes.image}
               width={N}
               height={N}
               onPointerMove={handlePaint}
@@ -204,7 +204,13 @@ const FourierImage: FC = props => {
           {' = '}
           <div className={classes.box + ' k'}>
             <div>K-space image:</div>
-            <canvas ref={kCanvasRef} width={N} height={N} />
+
+            <canvas
+              ref={kCanvasRef}
+              className={classes.image}
+              width={N}
+              height={N}
+            />
           </div>
         </div>
         <ul>
@@ -240,6 +246,9 @@ const useStyles = makeStyles(theme => ({
   },
   editor: {
     padding: '10px'
+  },
+  image: {
+    touchAction: 'none'
   },
   box: {
     '&.o canvas': { border: '3px solid blue' },

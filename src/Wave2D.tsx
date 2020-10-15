@@ -160,6 +160,7 @@ const Wave2D: FC = props => {
     <div className={classes.root}>
       <Card className={classes.menu}>
         <Button
+          className={classes.rephase}
           variant="contained"
           color="primary"
           onClick={handleRephaseClick}
@@ -168,7 +169,7 @@ const Wave2D: FC = props => {
           Rephase
         </Button>
         <Button
-          className={classes.pauseBtn}
+          className={classes.pause}
           variant="contained"
           color={pause ? 'secondary' : 'primary'}
           onClick={handlePauseClick}
@@ -177,6 +178,7 @@ const Wave2D: FC = props => {
           {pause ? 'Resume' : 'Pause'}
         </Button>
         <FormControlLabel
+          className={classes.square}
           label="Square"
           control={
             <Switch
@@ -293,9 +295,6 @@ const useStyles = makeStyles(theme => ({
     margin: '0 auto',
     justifyContent: 'center'
   },
-  pauseBtn: {
-    width: '120px'
-  },
   grow: {
     flexGrow: 1
   },
@@ -310,13 +309,34 @@ const useStyles = makeStyles(theme => ({
   menu: {
     gridArea: 'm',
     padding: '15px',
-    display: 'flex',
-    flexFlow: 'row wrap',
+    display: 'grid',
+    gridTemplate: '"r p s k"',
+    gridTemplateColumns: 'auto auto 1fr auto',
     alignItems: 'center',
-    gap: '5px',
-    marginBottom: '10px'
+    gap: '8px',
+    marginBottom: '10px',
+    [theme.breakpoints.down('xs')]: {
+      gridTemplate: `
+        "r s k"
+        "p s k"
+      `,
+      gridTemplateColumns: 'auto auto max-content',
+      justifyItems: 'space-between'
+    }
+  },
+  rephase: {
+    gridArea: 'r',
+    width: '150px'
+  },
+  pause: {
+    gridArea: 'p',
+    width: '150px'
+  },
+  square: {
+    gridArea: 's'
   },
   kSpace: {
+    gridArea: 'k',
     boxShadow: '0 0 8px 2px silver'
   }
 }));

@@ -202,7 +202,7 @@ const FourierGraph: FC = props => {
               checked={showAmps}
             />
           }
-          label="Show amplitudes"
+          label="Amplitudes"
         />
       </Card>
       <canvas
@@ -278,7 +278,8 @@ const useStyles = makeStyles(theme => ({
     height: '100%',
     gridArea: 'c',
     cursor: 'crosshair',
-    background: '#eeeeee'
+    background: '#eeeeee',
+    touchAction: 'none'
   },
 
   amplitudesCard: {
