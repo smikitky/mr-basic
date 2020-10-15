@@ -1,7 +1,9 @@
 declare module 'styled-components';
 
 declare module 'fft-js' {
-  export function fft(vector: number[]): [number, number][];
+  export function fft(
+    vector: (number | [number, number])[]
+  ): [number, number][];
 }
 
 declare module '*.jpg' {
