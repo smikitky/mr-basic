@@ -24,6 +24,13 @@ const Home: FC = () => {
           </Button>
         ))}
       </div>
+      <hr />
+      <p>Author: Soichiro Miki</p>
+      <ul>
+        <li>
+          <a href="https://github.com/smikitky/mr-basic">GitHub</a>
+        </li>
+      </ul>
     </>
   );
 };
