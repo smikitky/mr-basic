@@ -155,6 +155,7 @@ const FourierImage: FC = props => {
 
   const handlePaint = (ev: React.MouseEvent) => {
     if (!down) return;
+    ev.preventDefault();
     const canvas = oCanvasRef.current!;
     const ctx = canvas.getContext('2d')!;
     const rect = canvas.getBoundingClientRect();
@@ -194,10 +195,10 @@ const FourierImage: FC = props => {
               ref={oCanvasRef}
               width={N}
               height={N}
-              onMouseMove={handlePaint}
-              onMouseDown={() => setDown(true)}
-              onMouseUp={() => setDown(false)}
-              onMouseLeave={() => setDown(false)}
+              onPointerMove={handlePaint}
+              onPointerDown={() => setDown(true)}
+              onPointerLeave={() => setDown(false)}
+              onPointerUp={() => setDown(false)}
             />
           </div>
           {' = '}

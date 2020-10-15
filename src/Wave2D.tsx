@@ -311,7 +311,7 @@ const useStyles = makeStyles(theme => ({
     gridArea: 'm',
     padding: '15px',
     display: 'flex',
-    flexFlow: 'row',
+    flexFlow: 'row wrap',
     alignItems: 'center',
     gap: '5px',
     marginBottom: '10px'

@@ -101,16 +101,16 @@ const FourierGraph: FC = props => {
     }
   }, [drawMain, fftResults, input, maxLines]);
 
-  const handleMouseDown = () => {
+  const handlePointerDown = () => {
     setDragging(true);
   };
 
-  const handleMouseUp = () => {
+  const handlePointerUp = () => {
     setDragging(false);
     setPrevPos(undefined);
   };
 
-  const handleMouseMove = (ev: React.MouseEvent) => {
+  const handlePointerMove = (ev: React.MouseEvent) => {
     if (!dragging) return;
     const canvas = canvasRef.current!;
     const rect = canvas.getBoundingClientRect();
@@ -208,10 +208,10 @@ const FourierGraph: FC = props => {
       <canvas
         ref={canvasRef}
         className={classes.canvas}
-        onMouseDown={handleMouseDown}
-        onMouseUp={handleMouseUp}
-        onMouseOut={handleMouseUp}
-        onMouseMove={handleMouseMove}
+        onPointerDown={handlePointerDown}
+        onPointerUp={handlePointerUp}
+        onPointerOut={handlePointerUp}
+        onPointerMove={handlePointerMove}
       />
       {showAmps && (
         <Card className={classes.amplitudesCard}>
@@ -268,6 +268,7 @@ const useStyles = makeStyles(theme => ({
     padding: '10px',
     gridArea: 'm',
     display: 'flex',
+    flexFlow: 'row wrap',
     gap: '15px',
     alignItems: 'center'
   },
@@ -283,7 +284,7 @@ const useStyles = makeStyles(theme => ({
   amplitudesCard: {
     gridArea: 'a',
     padding: '10px',
-    width: '250px',
+    width: '150px',
     userSelect: 'none'
   },
 
