@@ -1,19 +1,23 @@
 import Card from '@material-ui/core/Card';
 import { makeStyles } from '@material-ui/core/styles';
 import { fft } from 'fft-js';
-import React, { FC, useRef, useState, useMemo, useEffect } from 'react';
+import { debounce } from 'lodash';
+import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 import beans from './images/beans.jpg';
+import black from './images/black.jpg';
+import brain from './images/brain.jpg';
 import cherry from './images/cherry.jpg';
+import kanji_omo from './images/kanji_omo.jpg';
+import kanji_river from './images/kanji_river.jpg';
 import lenna from './images/lenna.jpg';
 import snow from './images/snow.jpg';
 import starstripe from './images/starstripe.jpg';
 import zebra from './images/zebra.jpg';
-import kanji_omo from './images/kanji_omo.jpg';
-import kanji_river from './images/kanji_river.jpg';
-import { debounce } from 'lodash';
 
 const N = 256;
 const images = {
+  black,
+  brain,
   beans,
   cherry,
   lenna,
@@ -227,8 +231,10 @@ const useStyles = makeStyles(theme => ({
     height: '80px',
     boxShadow: '3px 3px 3px silver',
     marginRight: '10px',
+    transition: 'all 0.3s',
     '&:hover': {
-      boxShadow: '3px 3px 3px gray'
+      boxShadow: '3px 3px 3px gray',
+      transform: 'scale(1.1)'
     }
   },
   editor: {
