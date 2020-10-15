@@ -33,7 +33,7 @@ const FourierGraph: FC = props => {
   const [dragging, setDragging] = useState(false);
   const [showAmps, setShowAmps] = useState(true);
 
-  const draw = () => {
+  const draw = useCallback(() => {
     const canvas = canvasRef.current!;
     const { width, height } = canvas.getBoundingClientRect();
     const ctx = canvas.getContext('2d')!;
@@ -99,7 +99,7 @@ const FourierGraph: FC = props => {
       }
       ctx.stroke();
     }
-  };
+  }, [drawMain, fftResults, input, maxLines]);
 
   const handleMouseDown = () => {
     setDragging(true);
@@ -228,7 +228,7 @@ const AmpDisplay: FC<{
   fftResults: [number, number][];
 }> = React.memo(props => {
   const classes = useStyles();
-  const { max = 10, fftResults } = props;
+  const { max = 15, fftResults } = props;
   const items = fftResults
     .slice(0, max)
     .map(f => [f[0], f[1], Math.sqrt(f[0] * f[0] + f[1] * f[1])]);

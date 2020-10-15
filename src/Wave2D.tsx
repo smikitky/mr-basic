@@ -168,6 +168,7 @@ const Wave2D: FC = props => {
           Rephase
         </Button>
         <Button
+          className={classes.pauseBtn}
           variant="contained"
           color={pause ? 'secondary' : 'primary'}
           onClick={handlePauseClick}
@@ -185,6 +186,7 @@ const Wave2D: FC = props => {
             />
           }
         />
+        <div className={classes.grow} />
         <KSpace x={k.x} y={k.y} onKSpaceChange={rephase} />
       </Card>
       <div className={classes.waveArea}>
@@ -290,6 +292,12 @@ const useStyles = makeStyles(theme => ({
     gridTemplateColumns: 'auto min(80vw, 80vh)',
     margin: '0 auto',
     justifyContent: 'center'
+  },
+  pauseBtn: {
+    width: '120px'
+  },
+  grow: {
+    flexGrow: 1
   },
   canvas: {
     cursor: 'pointer',
