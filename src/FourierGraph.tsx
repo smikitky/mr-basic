@@ -1,4 +1,11 @@
-import React, { FC, useRef, useState, useEffect, useMemo } from 'react';
+import React, {
+  FC,
+  useRef,
+  useState,
+  useEffect,
+  useMemo,
+  useCallback
+} from 'react';
 import { useImmer } from 'use-immer';
 import { fft } from 'fft-js';
 import TextField from '@material-ui/core/TextField';

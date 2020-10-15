@@ -70,7 +70,7 @@ const Wave1D: FC = props => {
     return () => {
       finished = true;
     };
-  }, [gradient]);
+  }, [gradient, phases]);
 
   const handleSliderChange = (ev: any, value: number | number[]) => {
     setGradient(value as number);

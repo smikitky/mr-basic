@@ -128,7 +128,7 @@ const Wave2D: FC = props => {
     return () => {
       finished = true;
     };
-  }, [gradientX, gradientY, pause, protonType]);
+  }, [gradientX, gradientY, pause, phases, protonType]);
 
   const rephase = (kx: number, ky: number) => {
     for (let x = 0; x < N; x++) {
