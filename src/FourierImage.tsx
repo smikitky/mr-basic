@@ -1,7 +1,7 @@
 import Card from '@material-ui/core/Card';
 import { makeStyles } from '@material-ui/core/styles';
 import { fft } from 'fft-js';
-import React, { FC, useRef } from 'react';
+import React, { FC, useRef, useState, useMemo, useEffect } from 'react';
 import beans from './images/beans.jpg';
 import cherry from './images/cherry.jpg';
 import lenna from './images/lenna.jpg';
@@ -10,6 +10,7 @@ import starstripe from './images/starstripe.jpg';
 import zebra from './images/zebra.jpg';
 import kanji_omo from './images/kanji_omo.jpg';
 import kanji_river from './images/kanji_river.jpg';
+import { debounce } from 'lodash';
 
 const N = 256;
 const images = {
@@ -91,7 +92,11 @@ const fromCanvas = (ctx: CanvasRenderingContext2D): number[] => {
   const result = new Array(N * N);
   const imageData = ctx.getImageData(0, 0, N, N);
   for (let i = 0; i < N * N; i++) {
-    result[i] = imageData.data[i * 4];
+    result[i] =
+      (imageData.data[i * 4] +
+        imageData.data[i * 4 + 1] +
+        imageData.data[i * 4 + 2]) /
+      3;
   }
   return result;
 };
@@ -100,16 +105,70 @@ const FourierImage: FC = props => {
   const classes = useStyles();
   const oCanvasRef = useRef<HTMLCanvasElement>(null);
   const kCanvasRef = useRef<HTMLCanvasElement>(null);
+  const [down, setDown] = useState(false);
 
-  const handleImageClick = (ev: React.MouseEvent) => {
+  const convert = useMemo(
+    () =>
+      debounce(() => {
+        const canvas = oCanvasRef.current!;
+        const ctx = canvas.getContext('2d')!;
+        const data = fromCanvas(ctx);
+        const fftResult = swapQuadrants(normalize(fft2d(data)));
+        toCanvas(kCanvasRef.current!.getContext('2d')!, fftResult);
+      }, 100),
+    []
+  );
+
+  useEffect(() => {
+    const handlePaste = (ev: ClipboardEvent) => {
+      const items = Array.from(ev.clipboardData?.items ?? []);
+      const item = items.find(i => i.type.startsWith('image'));
+      if (!item) return;
+      ev.preventDefault();
+      const url = URL.createObjectURL(item.getAsFile());
+      const image = new Image();
+      image.src = url;
+      image.addEventListener('load', () => {
+        const ctx = oCanvasRef.current!.getContext('2d')!;
+        ctx.drawImage(image, 0, 0, N, N);
+        toCanvas(ctx, fromCanvas(ctx)); // discards color and alpha
+        convert();
+      });
+    };
+    document.addEventListener('paste', handlePaste);
+    return () => {
+      document.removeEventListener('paste', handlePaste);
+    };
+  }, [convert]);
+
+  const handleImageSelect = (ev: React.MouseEvent) => {
     const image = ev.target as HTMLImageElement;
     const canvas = oCanvasRef.current!;
     const ctx = canvas.getContext('2d')!;
     ctx.drawImage(image, 0, 0);
-    const data = fromCanvas(ctx);
-    const fftResult = swapQuadrants(normalize(fft2d(data)));
-    toCanvas(kCanvasRef.current!.getContext('2d')!, fftResult);
+    convert();
   };
+
+  const handlePaint = (ev: React.MouseEvent) => {
+    if (!down) return;
+    const canvas = oCanvasRef.current!;
+    const ctx = canvas.getContext('2d')!;
+    const rect = canvas.getBoundingClientRect();
+    const x = ev.clientX - rect.x;
+    const y = ev.clientY - rect.y;
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.ellipse(x, y, 10, 10, 0, 0, Math.PI * 2);
+    ctx.fill();
+    convert();
+  };
+
+  useEffect(() => {
+    const ctx = oCanvasRef.current!.getContext('2d')!;
+    ctx.fillStyle = '#000000';
+    ctx.fillRect(0, 0, N, N);
+    convert();
+  }, [convert]);
 
   return (
     <div className={classes.root}>
@@ -119,20 +178,34 @@ const FourierImage: FC = props => {
             key={url}
             className={classes.thumb}
             src={url}
-            onClick={handleImageClick}
+            onClick={handleImageSelect}
           />
         ))}
       </Card>
       <Card className={classes.editor}>
-        <div className={classes.box + ' o'}>
-          <div>Original:</div>
-          <canvas ref={oCanvasRef} width={N} height={N} />
+        <div>
+          <div className={classes.box + ' o'}>
+            <div>Original:</div>
+            <canvas
+              ref={oCanvasRef}
+              width={N}
+              height={N}
+              onMouseMove={handlePaint}
+              onMouseDown={() => setDown(true)}
+              onMouseUp={() => setDown(false)}
+              onMouseLeave={() => setDown(false)}
+            />
+          </div>
+          {' = '}
+          <div className={classes.box + ' k'}>
+            <div>K-space image:</div>
+            <canvas ref={kCanvasRef} width={N} height={N} />
+          </div>
         </div>
-        {' = '}
-        <div className={classes.box + ' k'}>
-          <div>K-space image:</div>
-          <canvas ref={kCanvasRef} width={N} height={N} />
-        </div>
+        <ul>
+          <li>Press Ctrl + V to paste from clipboard.</li>
+          <li>Drag to paint.</li>
+        </ul>
       </Card>
     </div>
   );
@@ -143,6 +216,8 @@ const useStyles = makeStyles(theme => ({
     height: '100%'
   },
   thumbs: {
+    overflowX: 'auto',
+    display: 'flex',
     padding: '10px',
     marginBottom: '10px'
   },
