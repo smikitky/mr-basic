@@ -118,7 +118,7 @@ const FourierGraph: FC = props => {
     const clickY = ev.clientY - rect.top;
     const x = Math.floor((clickX / rect.width) * N); // 0 - (N-1)
     const y = rect.height / 2 - clickY;
-    if (x === 0 || x === N - 1) return;
+    if (x <= 0 || N - 1 <= x) return;
     setInput(input => {
       if (!prevPos) {
         input[x] = y;
@@ -261,7 +261,7 @@ const useStyles = makeStyles(theme => ({
       'm m' auto
       'c a' 1fr
       / 1fr auto`,
-    gap: '10px'
+    gap: '10px 0'
   },
 
   menu: {
@@ -286,7 +286,8 @@ const useStyles = makeStyles(theme => ({
     gridArea: 'a',
     padding: '10px',
     width: '150px',
-    userSelect: 'none'
+    userSelect: 'none',
+    marginLeft: '10px'
   },
 
   amps: {

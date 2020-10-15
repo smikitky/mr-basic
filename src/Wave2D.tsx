@@ -317,20 +317,21 @@ const useStyles = makeStyles(theme => ({
     marginBottom: '10px',
     [theme.breakpoints.down('xs')]: {
       gridTemplate: `
-        "r s k"
-        "p s k"
+        "r k"
+        "p k"
+        "s k"
       `,
-      gridTemplateColumns: 'auto auto max-content',
+      gridTemplateColumns: 'auto max-content',
       justifyItems: 'space-between'
     }
   },
   rephase: {
     gridArea: 'r',
-    width: '150px'
+    width: '120px'
   },
   pause: {
     gridArea: 'p',
-    width: '150px'
+    width: '120px'
   },
   square: {
     gridArea: 's'
