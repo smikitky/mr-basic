@@ -10,3 +10,10 @@ declare module '*.jpg' {
   const url: string;
   export default url;
 }
+
+declare module 'worker-loader!*' {
+  class WebpackWorker extends Worker {
+    constructor();
+  }
+  export default WebpackWorker;
+}

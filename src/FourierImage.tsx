@@ -13,6 +13,7 @@ import lenna from './images/lenna.jpg';
 import snow from './images/snow.jpg';
 import starstripe from './images/starstripe.jpg';
 import zebra from './images/zebra.jpg';
+import FftWorker from 'worker-loader!./fft.worker';
 
 const N = 256;
 const images = {
@@ -28,57 +29,7 @@ const images = {
   kanji_river
 };
 
-const fft2d = (data: number[]) => {
-  if (data.length !== N * N) throw new Error('Length error');
-  const result: [number, number][] = new Array(N * N);
-  // FFT along x-axis
-  for (let y = 0; y < N; y++) {
-    const line: number[] = new Array(N);
-    for (let x = 0; x < N; x++) {
-      line[x] = data[x + y * N];
-    }
-    const fftLine = fft(line);
-    for (let x = 0; x < N; x++) {
-      result[x + y * N] = fftLine[x];
-    }
-  }
-  // FFT along y-axis
-  for (let x = 0; x < N; x++) {
-    const line: [number, number][] = new Array(N);
-    for (let y = 0; y < N; y++) {
-      line[y] = result[x + y * N];
-    }
-    const fftLine = fft(line);
-    for (let y = 0; y < N; y++) {
-      result[x + y * N] = fftLine[y];
-    }
-  }
-  return result;
-};
-
-const normalize = (data: [number, number][]): number[] => {
-  const amps = data.map(c => Math.log(Math.sqrt(c[0] * c[0] + c[1] * c[1])));
-  const max = Math.max(...amps);
-  const normalized = amps.map(a => (a * 0xff) / max);
-  return normalized;
-};
-
-const swapQuadrants = (data: number[]) => {
-  const result = new Array(N * N);
-  const copyPixels = (from: [number, number], to: [number, number]) => {
-    for (let x = 0; x < N / 2; x++) {
-      for (let y = 0; y < N / 2; y++) {
-        result[to[0] + x + (to[1] + y) * N] =
-          data[from[0] + x + (from[1] + y) * N];
-      }
-    }
-  };
-  copyPixels([N / 2, 0], [0, N / 2]); // 1 -> 3
-  copyPixels([0, 0], [N / 2, N / 2]); // 2 -> 4
-  copyPixels([0, N / 2], [N / 2, 0]); // 3 -> 1
-  copyPixels([N / 2, N / 2], [0, 0]); // 4 -> 2
-  return result;
-};
+const fftWorker = new FftWorker();
 
 const toCanvas = (ctx: CanvasRenderingContext2D, data: number[]) => {
   const imageData = new ImageData(N, N);
@@ -117,9 +68,14 @@ const FourierImage: FC = props => {
         const canvas = oCanvasRef.current!;
         const ctx = canvas.getContext('2d')!;
         const data = fromCanvas(ctx);
-        const fftResult = swapQuadrants(normalize(fft2d(data)));
-        toCanvas(kCanvasRef.current!.getContext('2d')!, fftResult);
-      }, 100),
+        const handler = (ev: MessageEvent<number[]>) => {
+          const fftResults = ev.data;
+          toCanvas(kCanvasRef.current!.getContext('2d')!, fftResults);
+          fftWorker.removeEventListener('message', handler);
+        };
+        fftWorker.addEventListener('message', handler);
+        fftWorker.postMessage({ data, N });
+      }, 50),
     []
   );
 
@@ -214,7 +170,9 @@ const FourierImage: FC = props => {
           </div>
         </div>
         <ul>
-          <li>Press Ctrl + V to paste from clipboard.</li>
+          {!('ontouchstart' in window) && (
+            <li>Press Ctrl + V to paste from clipboard.</li>
+          )}
           <li>Drag to paint.</li>
         </ul>
       </Card>
