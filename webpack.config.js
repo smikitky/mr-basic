@@ -36,7 +36,7 @@ module.exports = (_, { mode }) => ({
   resolve: { extensions: ['.tsx', '.ts', '.js'] },
   plugins: [
     new BundleAnalyzerPlugin({
-      analyzeMode:
+      analyzerMode:
         !process.env.NETLIFY && mode === 'production' ? 'server' : 'disabled'
     })
   ]
