@@ -1,7 +1,6 @@
 import Card from '@material-ui/core/Card';
 import { makeStyles } from '@material-ui/core/styles';
-import { fft } from 'fft-js';
-import { debounce } from 'lodash';
+import debounce from 'lodash/debounce';
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 import beans from './images/beans.jpg';
 import black from './images/black.jpg';
