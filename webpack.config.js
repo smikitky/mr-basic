@@ -1,6 +1,7 @@
 const path = require('path');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
-module.exports = {
+module.exports = (_, { mode }) => ({
   entry: {
     index: path.join(__dirname, 'src', 'index.tsx')
   },
@@ -32,5 +33,11 @@ module.exports = {
     compress: true,
     port: 9000
   },
-  resolve: { extensions: ['.tsx', '.ts', '.js'] }
-};
+  resolve: { extensions: ['.tsx', '.ts', '.js'] },
+  plugins: [
+    new BundleAnalyzerPlugin({
+      analyzeMode:
+        !process.env.NETLIFY && mode === 'production' ? 'server' : 'disabled'
+    })
+  ]
+});
