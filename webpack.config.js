@@ -5,7 +5,7 @@ module.exports = (_, { mode }) => ({
   entry: {
     index: path.join(__dirname, 'src', 'index.tsx')
   },
-  devtool: 'inline-source-map',
+  devtool: mode === 'production' ? false : 'inline-source-map',
   module: {
     rules: [
       { test: /\.tsx?$/, loader: 'ts-loader' },
