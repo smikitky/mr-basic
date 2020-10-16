@@ -338,7 +338,8 @@ const useStyles = makeStyles(theme => ({
   },
   kSpace: {
     gridArea: 'k',
-    boxShadow: '0 0 8px 2px silver'
+    boxShadow: '0 0 8px 2px silver',
+    touchAction: 'none'
   }
 }));
 
