@@ -99,6 +99,7 @@ const Wave1D: FC = props => {
         onChange={handleSliderChange}
         onChangeCommitted={handleSliderComitted}
         valueLabelDisplay="on"
+        track={false}
         marks
       />
     </div>

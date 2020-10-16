@@ -206,6 +206,7 @@ const Wave2D: FC = props => {
           onChange={(ev, value) => setGradientX(value as number)}
           onChangeCommitted={() => setGradientX(0)}
           valueLabelDisplay="auto"
+          track={false}
           marks
         />
         <Slider
@@ -217,6 +218,7 @@ const Wave2D: FC = props => {
           onChange={(ev, value) => setGradientY(value as number)}
           onChangeCommitted={() => setGradientY(0)}
           valueLabelDisplay="auto"
+          track={false}
           marks
         />
       </div>
