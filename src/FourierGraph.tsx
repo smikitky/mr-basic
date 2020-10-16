@@ -278,7 +278,7 @@ const useStyles = makeStyles(theme => ({
     height: '100%',
     gridArea: 'c',
     cursor: 'crosshair',
-    background: '#eeeeee',
+    background: 'white',
     touchAction: 'none'
   },
 

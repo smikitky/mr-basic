@@ -5,16 +5,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import SyncIcon from '@material-ui/icons/Sync';
 import React, { FC, useEffect, useRef, useState } from 'react';
 
-const useStyles = makeStyles(theme => ({
-  menu: { padding: '10px' },
-  canvas: {
-    width: '100%',
-    height: '500px',
-    marginTop: '10px',
-    marginBottom: '35px'
-  }
-}));
-
 const N = 30;
 
 const Wave1D: FC = props => {
@@ -85,7 +75,7 @@ const Wave1D: FC = props => {
   };
 
   return (
-    <div>
+    <div className={classes.root}>
       <Card className={classes.menu}>
         <Button
           variant="contained"
@@ -99,8 +89,8 @@ const Wave1D: FC = props => {
       <canvas
         ref={canvasRef}
         className={classes.canvas}
-        width={1000}
-        height={500}
+        width={300}
+        height={300}
       />
       <Slider
         min={-10}
@@ -116,3 +106,27 @@ const Wave1D: FC = props => {
 };
 
 export default Wave1D;
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    width: '100%',
+    height: '100%',
+    display: 'grid',
+    gridTemplate: `'m' 'c' 's'`,
+    gridTemplateRows: 'auto 1fr auto',
+    gap: '10px'
+  },
+  menu: {
+    gridArea: 'm',
+    padding: '10px'
+  },
+  canvas: {
+    gridArea: 'c',
+    marginBotton: '0',
+    width: '100%',
+    height: '100%'
+  },
+  slider: {
+    gridArea: 's'
+  }
+}));
