@@ -12,7 +12,6 @@ import TextField from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/Button';
 import ZeroIcon from '@material-ui/icons/ExposureZero';
 import Card from '@material-ui/core/Card';
-import Typography from '@material-ui/core/Typography';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import { makeStyles } from '@material-ui/core/styles';
@@ -213,12 +212,7 @@ const FourierGraph: FC = props => {
         onPointerOut={handlePointerUp}
         onPointerMove={handlePointerMove}
       />
-      {showAmps && (
-        <Card className={classes.amplitudesCard}>
-          <Typography variant="h5">Amplitudes</Typography>
-          <AmpDisplay fftResults={fftResults} />
-        </Card>
-      )}
+      {showAmps && <AmpDisplay fftResults={fftResults} />}
     </div>
   );
 };
@@ -234,21 +228,24 @@ const AmpDisplay: FC<{
     .map(f => [f[0], f[1], Math.sqrt(f[0] * f[0] + f[1] * f[1])]);
   const maxF = Math.max(...items.map(i => i[2]));
   return (
-    <ul className={classes.amps}>
-      {items.map((item, i) => {
-        return (
-          <li key={i} className="amp">
-            <div
-              className="bar"
-              style={{ right: `${100 - (item[2] / maxF) * 100}%` }}
-            />
-            <div>
-              {i}: {item[2].toFixed(2)}
-            </div>
-          </li>
-        );
-      })}
-    </ul>
+    <Card className={classes.amplitudesCard}>
+      <h2>Amplitudes</h2>
+      <ul className={classes.amplitudesList}>
+        {items.map((item, i) => {
+          return (
+            <li key={i} className="amp">
+              <div
+                className="bar"
+                style={{ right: `${100 - (item[2] / maxF) * 100}%` }}
+              />
+              <div>
+                {i}: {item[2].toFixed(2)}
+              </div>
+            </li>
+          );
+        })}
+      </ul>{' '}
+    </Card>
   );
 });
 
@@ -257,13 +254,11 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
     height: '100%',
     display: 'grid',
-    gridTemplate: `
-      'm m' auto
-      'c a' 1fr
-      / 1fr auto`,
+    gridTemplateAreas: `'m m' 'c a'`,
+    gridTemplateRows: 'auto minmax(0, 1fr)',
+    gridTemplateColumns: '1fr auto',
     gap: '10px 0'
   },
-
   menu: {
     padding: '10px',
     gridArea: 'm',
@@ -272,7 +267,6 @@ const useStyles = makeStyles(theme => ({
     gap: '15px',
     alignItems: 'center'
   },
-
   canvas: {
     width: '100%',
     height: '100%',
@@ -281,22 +275,30 @@ const useStyles = makeStyles(theme => ({
     background: 'white',
     touchAction: 'none'
   },
-
   amplitudesCard: {
     gridArea: 'a',
     padding: '10px',
-    width: '150px',
+    width: '120px',
     userSelect: 'none',
-    marginLeft: '10px'
+    marginLeft: '10px',
+    minHeight: 0,
+    minWidth: 0,
+    overflow: 'auto',
+    '& h2': {
+      fontSize: '15px',
+      fontWeight: 'bold',
+      margin: '0 0 10px 0'
+    }
   },
-
-  amps: {
+  amplitudesList: {
     margin: 0,
     padding: 0,
     listStyleType: 'none',
     '& li': {
+      fontSize: '12px',
+      lineHeight: '14px',
       backgroundRepeat: 'no-repeat',
-      marginBottom: '3px',
+      marginBottom: '2px',
       position: 'relative',
       zIndex: 0,
       '& .bar': {
