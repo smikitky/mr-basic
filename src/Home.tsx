@@ -26,11 +26,11 @@ const Home: FC = () => {
       </div>
       <hr />
       <p>Author: Soichiro Miki</p>
-      <ul>
+      {/* <ul>
         <li>
           <a href="https://github.com/smikitky/mr-basic">GitHub</a>
         </li>
-      </ul>
+      </ul> */}
     </>
   );
 };
