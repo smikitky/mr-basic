@@ -188,9 +188,10 @@ const Wave2D: FC = props => {
             />
           }
         />
-        <div className={classes.grow} />
-        <KSpace x={k.x} y={k.y} onKSpaceChange={rephase} />
       </Card>
+      <div className={classes.kSpacePane}>
+        <KSpace x={k.x} y={k.y} onKSpaceChange={rephase} />
+      </div>
       <div className={classes.waveArea}>
         <canvas
           className={classes.canvas}
@@ -287,18 +288,23 @@ const KSpace: FC<{
 };
 
 const useStyles = makeStyles(theme => ({
-  root: {},
+  root: {
+    display: 'grid',
+    gridTemplateAreas: `'m k' 'w w'`,
+    gridTemplateColumns: '1fr min-content',
+    '@media (orientation: landscape)': {
+      gridTemplateAreas: `'m m' 'w k'`
+    },
+    gap: '15px'
+  },
   waveArea: {
+    gridArea: 'w',
     display: 'grid',
     width: 'auto',
     gridTemplateAreas: `'v c' 'a h'`,
     gridTemplateRows: 'min(80vw, 80vh) auto',
-    gridTemplateColumns: 'auto min(80vw, 80vh)',
     margin: '0 auto',
     justifyContent: 'center'
-  },
-  grow: {
-    flexGrow: 1
   },
   canvas: {
     cursor: 'pointer',
@@ -311,21 +317,10 @@ const useStyles = makeStyles(theme => ({
   menu: {
     gridArea: 'm',
     padding: '15px',
-    display: 'grid',
-    gridTemplate: '"r p s k"',
-    gridTemplateColumns: 'auto auto 1fr auto',
+    display: 'flex',
+    flexFlow: 'row wrap',
     alignItems: 'center',
-    gap: '8px',
-    marginBottom: '10px',
-    [theme.breakpoints.down('xs')]: {
-      gridTemplate: `
-        "r k"
-        "p k"
-        "s k"
-      `,
-      gridTemplateColumns: 'auto max-content',
-      justifyItems: 'space-between'
-    }
+    gap: '8px'
   },
   rephase: {
     gridArea: 'r',
@@ -338,8 +333,13 @@ const useStyles = makeStyles(theme => ({
   square: {
     gridArea: 's'
   },
-  kSpace: {
+  kSpacePane: {
     gridArea: 'k',
+    display: 'flex',
+    alignItems: 'center',
+    padding: '5px'
+  },
+  kSpace: {
     boxShadow: '0 0 8px 2px silver',
     touchAction: 'none'
   }
