@@ -235,15 +235,29 @@ const KSpace: FC<{
   const classes = useStyles();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [down, setDown] = useState(false);
-  const { x = 0, y = 0, onKSpaceChange } = props;
+  const { x: kx = 0, y: ky = 0, onKSpaceChange } = props;
 
   useEffect(() => {
     const canvas = canvasRef.current!;
     const width = canvas.width;
     const height = canvas.height;
     const ctx = canvas.getContext('2d')!;
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(0, 0, width, height);
+
+    const imageData = ctx.getImageData(0, 0, width, height);
+    for (let x = 0; x < width; x++) {
+      for (let y = 0; y < height; y++) {
+        const idx = 4 * (x + y * width);
+        const lumi = Math.floor(
+          220 + 36 * Math.sin((x * kx) / Math.PI / 4 - (y * ky) / Math.PI / 4)
+        );
+        imageData.data[idx] = lumi;
+        imageData.data[idx + 1] = lumi;
+        imageData.data[idx + 2] = lumi;
+        imageData.data[idx + 3] = 255;
+      }
+    }
+    ctx.putImageData(imageData, 0, 0);
+
     ctx.beginPath();
     ctx.moveTo(0, height / 2);
     ctx.lineTo(width, height / 2);
@@ -253,8 +267,8 @@ const KSpace: FC<{
     ctx.fillStyle = '#ff0000';
     ctx.beginPath();
     ctx.ellipse(
-      x * 5 + width / 2,
-      -y * 5 + height / 2,
+      kx * 5 + width / 2,
+      -ky * 5 + height / 2,
       5,
       5,
       0,
@@ -262,7 +276,7 @@ const KSpace: FC<{
       Math.PI * 2
     );
     ctx.fill();
-  }, [x, y]);
+  }, [kx, ky]);
 
   const handlePointerMove = (ev: React.PointerEvent) => {
     if (!down) return;
